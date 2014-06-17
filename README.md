@@ -1,22 +1,22 @@
-MariaDB plugin for Dokku
+MariaDB plugin for Docker
 ------------------------
 
-Project: https://github.com/progrium/dokku
+Easy creation of a MariaDB docker container with a persistent database.
 
+A quick hack based on https://github.com/Kloadut/dokku-md-plugin. Adapted for use locally on OSX without dokku.
 
 Installation
 ------------
 ```
-cd /var/lib/dokku/plugins
-git clone https://github.com/Kloadut/dokku-md-plugin mariadb
-dokku plugins-install
+git clone https://github.com/neam/docker-md-plugin
+./docker-md-plugin/install
 ```
 
 
 Commands
 --------
 ```
-$ dokku help
+$ ./docker-md-plugin/commands help
      mariadb:create <app>      Create a MariaDB container
      mariadb:delete <app>      Delete specified MariaDB container
      mariadb:info <app>        Display database informations
@@ -28,7 +28,7 @@ $ dokku help
 
 Info
 --------
-This plugin adds following envvars to your project automatically:
+This plugin populates the following envvars for you to use in your docker container:
 
 * DATABASE_URL
 * DB_HOST
@@ -42,8 +42,7 @@ Simple usage
 
 Create a new DB:
 ```
-$ dokku mariadb:create foo            # Server side
-$ ssh dokku@server mariadb:create foo # Client side
+$ ./docker-md-plugin/commands mariadb:create foo
 
 -----> MariaDB container created: mariadb/foo
 
@@ -53,34 +52,6 @@ $ ssh dokku@server mariadb:create foo # Client side
        Database: 'db'
        Public port: 49187
 ```
-
-Deploy your app with the same name (client side):
-```
-$ git remote add dokku git@server:foo
-$ git push dokku master
-Counting objects: 155, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (70/70), done.
-Writing objects: 100% (155/155), 22.44 KiB | 0 bytes/s, done.
-Total 155 (delta 92), reused 131 (delta 80)
-remote: -----> Building foo ...
-remote:        Ruby/Rack app detected
-remote: -----> Using Ruby version: ruby-2.0.0
-
-... blah blah blah ...
-
-remote: -----> Deploying foo ...
-remote: 
-remote: -----> App foo linked to mariadb/foo database
-remote:        DATABASE_URL=mysql://root:RDSBYlUrOYMtndKb@172.16.0.104/db
-remote: 
-remote: -----> Deploy complete!
-remote: -----> Cleaning up ...
-remote: -----> Cleanup complete!
-remote: =====> Application deployed:
-remote:        http://foo.server
-```
-
 
 Advanced usage
 --------------
@@ -92,30 +63,30 @@ cat init.sql | dokku mariadb:create foo
 
 Deleting databases:
 ```
-dokku mariadb:delete foo
+./docker-md-plugin/commands mariadb:delete foo
 ```
 
 Linking an app to a specific database:
 ```
-dokku mariadb:link foo bar
+./docker-md-plugin/commands mariadb:link foo bar
 ```
 
 MariaDB logs (per database):
 ```
-dokku mariadb:logs foo
+./docker-md-plugin/commands mariadb:logs foo
 ```
 
 Database informations:
 ```
-dokku mariadb:info foo
+./docker-md-plugin/commands mariadb:info foo
 ```
 
 Login to mariadb console
 ```
-dokku mariadb:console
+./docker-md-plugin/commands mariadb:console
 ```
 
 Import to existing database
 ```
-dokku mariadb:console < import.sql
+./docker-md-plugin/commands mariadb:console < import.sql
 ```

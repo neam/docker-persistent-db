@@ -1,6 +1,20 @@
 #!/bin/bash
 set -e;
 
+# Various overrides to make script run locally on OSX and without dokku
+script_path=`dirname $0`
+export DOKKU_ROOT=`pwd`
+export LC_CTYPE=C
+export LC_ALL=C
+dokku () {
+    $script_path/commands $@
+}
+
+chown () {
+    # do nothing
+    :
+}
+
 # Check if name is specified
 if [[ $1 == mariadb:* ]]; then
     if [[ -z $2 ]]; then
