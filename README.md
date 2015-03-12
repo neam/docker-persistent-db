@@ -1,4 +1,4 @@
-MariaDB plugin for Docker
+Persistent MariaDB helper for Docker
 ------------------------
 
 Easy creation of a MariaDB docker container with a persistent database.
@@ -8,7 +8,7 @@ A quick hack based on https://github.com/Kloadut/dokku-md-plugin. Adapted for us
 Installation
 ------------
 ```
-git clone https://github.com/neam/docker-md-plugin
+git clone https://github.com/neam/docker-md-plugin --recursive
 ./docker-md-plugin/install
 ```
 
