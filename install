@@ -2,4 +2,4 @@
 
 # Build docker image
 script_path=`dirname $0`
-docker build -q=true -t kloadut/mariadb $script_path/dockerfiles
+docker build -q=true -t neam/db $script_path/dockerfiles
