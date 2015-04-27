@@ -1,22 +1,31 @@
 Persistent DB helper for Docker
 ------------------------
 
-Easy creation of a MySQL/MariaDB docker container with a persistent database.
+Easy creation of a MySQL docker container with persistent data. 
 
 A quick hack based on https://github.com/Kloadut/dokku-md-plugin. Adapted for use locally on OSX without dokku.
 
 Installation
 ------------
+
+Run the following from your project directory:
+
 ```
-git clone https://github.com/neam/docker-md-plugin --recursive
-./docker-md-plugin/install
+git clone https://github.com/neam/docker-persistent-db --recursive ../docker-persistent-db/
+../docker-persistent-db/install
 ```
 
+Then, create a persistent database according to "Simple usage" below.
+
+The metadata about the database containers is stored on the docker host in the `../docker-persistent-db/.db/` directory.
 
 Commands
 --------
+
+Note: Currently only the `db:create` command is verified to work.
+
 ```
-$ ./docker-md-plugin/commands help
+$ ../docker-persistent-db/commands help
      db:create <app>      Create a db container
      db:delete <app>      Delete specified db container
      db:info <app>        Display database informations
@@ -26,23 +35,12 @@ $ ./docker-md-plugin/commands help
      db:logs <app>        Display last logs from db container
 ```
 
-Info
---------
-This plugin populates the following envvars for you to use in your docker container:
-
-* DATABASE_URL
-* DB_HOST
-* DB_PORT
-* DB_NAME
-* DB_USER
-* DB_PASSWORD
-
 Simple usage
 ------------
 
 Create a new DB:
 ```
-$ ./docker-md-plugin/commands db:create foo
+$ ../docker-persistent-db/commands db:create foo
 
 -----> db container created: db/foo
 
@@ -63,30 +61,30 @@ cat init.sql | dokku db:create foo
 
 Deleting databases:
 ```
-./docker-md-plugin/commands db:delete foo
+../docker-persistent-db/commands db:delete foo
 ```
 
 Linking an app to a specific database:
 ```
-./docker-md-plugin/commands db:link foo bar
+../docker-persistent-db/commands db:link foo bar
 ```
 
 db logs (per database):
 ```
-./docker-md-plugin/commands db:logs foo
+../docker-persistent-db/commands db:logs foo
 ```
 
-Database informations:
+Database information:
 ```
-./docker-md-plugin/commands db:info foo
+../docker-persistent-db/commands db:info foo
 ```
 
 Login to db console
 ```
-./docker-md-plugin/commands db:console
+../docker-persistent-db/commands db:console
 ```
 
 Import to existing database
 ```
-./docker-md-plugin/commands db:console < import.sql
+../docker-persistent-db/commands db:console < import.sql
 ```
