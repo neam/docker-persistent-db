@@ -1,7 +1,7 @@
-Persistent MariaDB helper for Docker
+Persistent DB helper for Docker
 ------------------------
 
-Easy creation of a MariaDB docker container with a persistent database.
+Easy creation of a MySQL/MariaDB docker container with a persistent database.
 
 A quick hack based on https://github.com/Kloadut/dokku-md-plugin. Adapted for use locally on OSX without dokku.
 
@@ -17,13 +17,13 @@ Commands
 --------
 ```
 $ ./docker-md-plugin/commands help
-     mariadb:create <app>      Create a MariaDB container
-     mariadb:delete <app>      Delete specified MariaDB container
-     mariadb:info <app>        Display database informations
-     mariadb:link <app> <db>   Link an app to a MariaDB database
-     mariadb:console <app>     Open mysql-console to MariaDB container
-     mariadb:dump <app> <file> Dump default db database into file <file> is optional. 
-     mariadb:logs <app>        Display last logs from MariaDB container
+     db:create <app>      Create a db container
+     db:delete <app>      Delete specified db container
+     db:info <app>        Display database informations
+     db:link <app> <db>   Link an app to a db database
+     db:console <app>     Open mysql-console to db container
+     db:dump <app> <file> Dump default db database into file <file> is optional. 
+     db:logs <app>        Display last logs from db container
 ```
 
 Info
@@ -42,9 +42,9 @@ Simple usage
 
 Create a new DB:
 ```
-$ ./docker-md-plugin/commands mariadb:create foo
+$ ./docker-md-plugin/commands db:create foo
 
------> MariaDB container created: mariadb/foo
+-----> db container created: db/foo
 
        Host: 172.16.0.104
        User: 'root'
@@ -58,35 +58,35 @@ Advanced usage
 
 Inititalize the database with SQL statements:
 ```
-cat init.sql | dokku mariadb:create foo
+cat init.sql | dokku db:create foo
 ```
 
 Deleting databases:
 ```
-./docker-md-plugin/commands mariadb:delete foo
+./docker-md-plugin/commands db:delete foo
 ```
 
 Linking an app to a specific database:
 ```
-./docker-md-plugin/commands mariadb:link foo bar
+./docker-md-plugin/commands db:link foo bar
 ```
 
-MariaDB logs (per database):
+db logs (per database):
 ```
-./docker-md-plugin/commands mariadb:logs foo
+./docker-md-plugin/commands db:logs foo
 ```
 
 Database informations:
 ```
-./docker-md-plugin/commands mariadb:info foo
+./docker-md-plugin/commands db:info foo
 ```
 
-Login to mariadb console
+Login to db console
 ```
-./docker-md-plugin/commands mariadb:console
+./docker-md-plugin/commands db:console
 ```
 
 Import to existing database
 ```
-./docker-md-plugin/commands mariadb:console < import.sql
+./docker-md-plugin/commands db:console < import.sql
 ```
