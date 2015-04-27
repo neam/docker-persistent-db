@@ -40,9 +40,9 @@ fi
 case "$1" in
 
   db:create)
-    DB_IMAGE=db/$APP
+    DB_IMAGE=persistentdb/$APP
     # Check if DB container is installed
-    IMAGE=$(docker images | grep "neam/db " |  awk '{print $3}')
+    IMAGE=$(docker images | grep "neam/persistentdb " |  awk '{print $3}')
     if [[ -z $IMAGE ]]; then
         echo "db image not found... Did you run 'dokku plugins-install' ?"
         exit 1
@@ -51,7 +51,7 @@ case "$1" in
     if [[ -f "$DOKKU_ROOT/.db/volume_$APP" ]]; then
         VOLUME="`cat $DOKKU_ROOT/.db/volume_$APP`:/opt/mysql"
         echo
-        echo "-----> Reusing db/$APP database"
+        echo "-----> Reusing persistentdb/$APP database"
     else
         VOLUME="/opt/mysql"
         # Generate a random password for DB user
@@ -66,7 +66,7 @@ case "$1" in
         docker stop $ID > /dev/null
     fi
     # Fork DB image
-    ID=$(docker run -d neam/db /bin/bash -c "exit 0")
+    ID=$(docker run -d neam/persistentdb /bin/bash -c "exit 0")
     docker wait $ID > /dev/null
     IMAGE=$(docker commit $ID)
     docker tag -f $IMAGE $DB_IMAGE
@@ -94,7 +94,7 @@ case "$1" in
     ;;
 
   db:delete)
-    DB_IMAGE=db/$APP
+    DB_IMAGE=persistentdb/$APP
     ID=$(docker ps -a | grep "$DB_IMAGE":latest |  awk '{print $1}')
     # Stop the container
     if [[ ! -z $ID ]]; then
@@ -127,7 +127,7 @@ case "$1" in
     ;;
 
   db:info)
-    DB_IMAGE=db/$APP
+    DB_IMAGE=persistentdb/$APP
     if [[ ! -f "$DOKKU_ROOT/.db/pwd_$APP" ]]; then
         echo "Unknown (or too old) db container"
         exit 1
@@ -146,7 +146,7 @@ case "$1" in
         # Check argument
         if [[ -z $3 ]]; then
             echo "Linking db to $APP"
-            DB_IMAGE="db/$APP"
+            DB_IMAGE="persistentdb/$APP"
             DB_PASSWORD=$(cat "$DOKKU_ROOT/.db/pwd_$APP")
             PORT=$(cat "$DOKKU_ROOT/.db/port_$APP")
             # Link database using dokku command
@@ -155,7 +155,7 @@ case "$1" in
             dokku config:set $APP "DB_HOST=172.17.42.1" "DB_PASS=$DB_PASSWORD" "DB_NAME=db" "DB_PORT=$PORT" "DB_USER=root"
             exit 1
         fi
-        DB_IMAGE="db/$3"
+        DB_IMAGE="persistentdb/$3"
         if [[ ! -f "$DOKKU_ROOT/.db/pwd_$3" ]]; then
             echo "Database is not initialized correctly"
             exit 1
@@ -179,7 +179,7 @@ case "$1" in
             echo "You must specify a database name"
             exit 1
         fi
-        DB_IMAGE="db/$2"
+        DB_IMAGE="persistentdb/$2"
         if [[ ! -f "$DOKKU_ROOT/.db/pwd_$2" ]]; then
             echo "Database is not initialized correctly"
             exit 1
@@ -198,7 +198,7 @@ case "$1" in
             echo "You must specify a database name"
             exit 1
         fi
-        DB_IMAGE="db/$2"
+        DB_IMAGE="persistentdb/$2"
         if [[ ! -f "$DOKKU_ROOT/.db/pwd_$2" ]]; then
             echo "Database is not initialized correctly"
             exit 1
@@ -216,7 +216,7 @@ case "$1" in
     ;;
 
   db:logs)
-    DB_IMAGE=db/$APP
+    DB_IMAGE=persistentdb/$APP
     ID=$(docker ps -a | grep "$DB_IMAGE" |  awk '{print $1}')
     docker logs $ID | tail -n 100
     ;;
