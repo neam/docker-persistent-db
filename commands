@@ -44,7 +44,7 @@ case "$1" in
     # Check if DB container is installed
     IMAGE=$(docker images | grep "neam/persistentdb " |  awk '{print $3}')
     if [[ -z $IMAGE ]]; then
-        echo "db image not found... Did you run 'dokku plugins-install' ?"
+        echo "db image not found... Did you run '../docker-persistent-db/install' ?"
         exit 1
     fi
     # Check if an existing DB volume exists
