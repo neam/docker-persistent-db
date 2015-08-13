@@ -75,7 +75,11 @@ case "$1" in
     sleep 4
     # Store persistent volume
     if [[ ! -f "$DOKKU_ROOT/.db/volume_$APP" ]]; then
-        VOLUME_PATH=$(docker inspect $ID | grep /var/lib/docker/volumes/ | awk '{print $2}' | sed -e's/"//g')
+        VOLUME_PATH=$(docker inspect $ID | grep /var/lib/docker/vfs/dir/ | awk '{print $2}' | sed -e's/"//g')
+        if [[ -z $VOLUME_PATH ]]; then
+            # Search in old location (<1.6)
+            VOLUME_PATH=$(docker inspect $ID | grep /var/lib/docker/volumes/ | awk '{print $2}' | sed -e's/"//g')
+        fi
         if [[ -z $VOLUME_PATH ]]; then
             echo "Your docker version is too old or too new (recommended version of Docker is 1.7.1)"
             exit 1
